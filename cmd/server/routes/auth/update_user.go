@@ -70,6 +70,6 @@ func updateUserRoute(service *auth.Service, logger *logrus.Logger) func(c *gin.C
 			return
 		}
 
-		c.JSON(http.StatusNoContent, nil)
+		c.JSON(http.StatusCreated, nil)
 	}
 }
