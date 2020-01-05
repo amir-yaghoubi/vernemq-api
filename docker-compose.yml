@@ -1,15 +1,15 @@
 version: "3"
 services:
   redis:
-    container_name: "vmq_auth_redis"
+    container_name: "vmq_api_redis"
     image: "redis:5.0.7-alpine"
     ports:
       - 6379:6379
     volumes:
       - ./data:/data
 
-  vernemq-auth-api:
-    container_name: "vmq_auth_api"
+  vernemq-api:
+    container_name: "vmq_api"
     build: .
     ports:
       - 9595:9595
