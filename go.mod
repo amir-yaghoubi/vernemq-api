@@ -1,4 +1,4 @@
-module github.com/amir-yaghoubi/vernemq-auth
+module github.com/amir-yaghoubi/vernemq-api
 
 go 1.13
 
