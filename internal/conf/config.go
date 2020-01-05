@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Config vernemq-auth configurations
+// Config vernemq-api configurations
 type Config struct {
 	Port         int
 	LogLevel     string

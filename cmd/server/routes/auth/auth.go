@@ -2,8 +2,8 @@ package auth
 
 import (
 	"fmt"
-	"github.com/amir-yaghoubi/vernemq-auth/internal/auth"
-	"github.com/amir-yaghoubi/vernemq-auth/internal/conf"
+	"github.com/amir-yaghoubi/vernemq-api/internal/auth"
+	"github.com/amir-yaghoubi/vernemq-api/internal/conf"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"time"
@@ -27,6 +27,8 @@ func cacheControl(ttl time.Duration) func(c *gin.Context) {
 // Use register auth routes on gin router
 func Use(cacheConfig conf.CacheControl, e *gin.Engine, service *auth.Service, logger *logrus.Logger) {
 	grp := e.Group("auth/")
+	grp.POST("/", updateUserRoute(service, logger))
+	grp.DELETE("/", deleteUserRoute(service, logger))
 	grp.POST("register/", cacheControl(cacheConfig.Register), registerRoute(service, logger))
 	grp.POST("publish/", cacheControl(cacheConfig.Publish), publishRoute(service, logger))
 	grp.POST("subscribe/", cacheControl(cacheConfig.Subscribe), subscribeRoute(service, logger))

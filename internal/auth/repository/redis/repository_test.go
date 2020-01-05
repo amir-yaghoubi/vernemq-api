@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/alicebob/miniredis/v2"
-	"github.com/amir-yaghoubi/vernemq-auth/internal/auth"
-	redisRepo "github.com/amir-yaghoubi/vernemq-auth/internal/auth/repository/redis"
+	"github.com/amir-yaghoubi/vernemq-api/internal/auth"
+	redisRepo "github.com/amir-yaghoubi/vernemq-api/internal/auth/repository/redis"
 	"github.com/go-redis/redis/v7"
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"

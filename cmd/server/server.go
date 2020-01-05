@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	authRoute "github.com/amir-yaghoubi/vernemq-auth/cmd/server/routes/auth"
-	"github.com/amir-yaghoubi/vernemq-auth/internal/auth"
-	lruRepo "github.com/amir-yaghoubi/vernemq-auth/internal/auth/repository/lru"
-	redisRepo "github.com/amir-yaghoubi/vernemq-auth/internal/auth/repository/redis"
-	"github.com/amir-yaghoubi/vernemq-auth/internal/conf"
+	authRoute "github.com/amir-yaghoubi/vernemq-api/cmd/server/routes/auth"
+	"github.com/amir-yaghoubi/vernemq-api/internal/auth"
+	lruRepo "github.com/amir-yaghoubi/vernemq-api/internal/auth/repository/lru"
+	redisRepo "github.com/amir-yaghoubi/vernemq-api/internal/auth/repository/redis"
+	"github.com/amir-yaghoubi/vernemq-api/internal/conf"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v7"
 	"github.com/sirupsen/logrus"
@@ -58,7 +58,7 @@ func main() {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
 
-	gin.SetMode(gin.ReleaseMode)
+	// gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 
 	client := redis.NewClient(&redis.Options{

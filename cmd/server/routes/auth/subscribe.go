@@ -2,7 +2,7 @@ package auth
 
 import (
 	"errors"
-	"github.com/amir-yaghoubi/vernemq-auth/internal/auth"
+	"github.com/amir-yaghoubi/vernemq-api/internal/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/sirupsen/logrus"

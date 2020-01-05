@@ -2,6 +2,7 @@ package auth
 
 import (
 	"errors"
+	"time"
 
 	mqttpattern "github.com/amir-yaghoubi/mqtt-pattern"
 	"github.com/sirupsen/logrus"
@@ -121,6 +122,29 @@ func (s *Service) authorizeSubscribe(clientID string, username string, subscript
 	}
 
 	return results
+}
+
+// UpdateUser update user ACL
+func (s *Service) UpdateUser(user User) error {
+	u, err := s.repo.Get(user.Username)
+	if err != nil && !errors.Is(err, ErrUserNotFound) {
+		return err
+	}
+
+	if !errors.Is(err, ErrUserNotFound) {
+		user.CreatedAt = u.CreatedAt
+	} else {
+		user.CreatedAt = time.Now()
+	}
+
+	user.UpdatedAt = time.Now()
+
+	return s.repo.Set(&user)
+}
+
+// DeleteUser delete user from database
+func (s *Service) DeleteUser(username string) (bool, error) {
+	return s.repo.Delete(username)
 }
 
 // Authenticate with clientID, username and password

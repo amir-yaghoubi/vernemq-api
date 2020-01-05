@@ -2,7 +2,7 @@ package redis
 
 import (
 	"errors"
-	"github.com/amir-yaghoubi/vernemq-auth/internal/auth"
+	"github.com/amir-yaghoubi/vernemq-api/internal/auth"
 	"github.com/go-redis/redis/v7"
 	"github.com/vmihailenco/msgpack/v4"
 )

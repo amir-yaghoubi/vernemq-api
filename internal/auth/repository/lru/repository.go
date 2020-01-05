@@ -1,7 +1,7 @@
 package cache
 
 import (
-	"github.com/amir-yaghoubi/vernemq-auth/internal/auth"
+	"github.com/amir-yaghoubi/vernemq-api/internal/auth"
 	lru "github.com/hashicorp/golang-lru"
 )
 
