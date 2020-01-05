@@ -1,0 +1,25 @@
+version: "3"
+services:
+  redis:
+    container_name: "vmq_auth_redis"
+    image: "redis:5.0.7-alpine"
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data:/data
+
+  vernemq-auth-api:
+    container_name: "vmq_auth_api"
+    build: .
+    ports:
+      - 9595:9595
+    environment:
+      - PORT=9595
+      - LOG_LEVEL=error
+      - AUTH_LRU_SIZE=2000
+      - REDIS_ADDR=redis:6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+      - CC_REGISTER=12h
+      - CC_PUBLISH=12h
+      - CC_SUBSCRIBE=12h
