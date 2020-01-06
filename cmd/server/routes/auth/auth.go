@@ -10,7 +10,7 @@ import (
 )
 
 type errorMessage struct {
-	Error string `json:"error"`
+	Error string `json:"error" example:"something really bad happend"`
 }
 
 type errorResponse struct {
@@ -25,7 +25,7 @@ func cacheControl(ttl time.Duration) func(c *gin.Context) {
 }
 
 // Use register auth routes on gin router
-func Use(cacheConfig conf.CacheControl, e *gin.Engine, service *auth.Service, logger *logrus.Logger) {
+func Use(cacheConfig conf.CacheControl, e *gin.RouterGroup, service *auth.Service, logger *logrus.Logger) {
 	grp := e.Group("auth/")
 	grp.POST("user/", updateUserRoute(service, logger))
 	grp.DELETE("user/", deleteUserRoute(service, logger))

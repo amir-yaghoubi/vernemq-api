@@ -10,13 +10,13 @@ import (
 )
 
 type publishACL struct {
-	Pattern       string `json:"pattern"`
+	Pattern       string `json:"pattern" example:"foo/bar/baz"`
 	MaxQos        *uint8 `json:"max_qos,omitempty"`
 	AllowedRetain *bool  `json:"allowed_retain,omitempty"`
 }
 
 type subACL struct {
-	Pattern string `json:"pattern"`
+	Pattern string `json:"pattern" example:"foo/bar/baz"`
 	MaxQos  *uint8 `json:"max_qos,omitempty"`
 }
 
@@ -29,12 +29,27 @@ type updateUserRequest struct {
 	SubACL     []subACL     `json:"subscribe_acl,omitempty"`
 }
 
+type updateUserResponse struct {
+	Result string `json:"result" example:"ok"`
+}
+
+// Insert or Update User
+// @Summary Insert or Update User
+// @Description Insert or Update User ACL
+// @Tags users
+// @Accept  json
+// @Produce  json
+// @Param payload body updateUserRequest true "Payload"
+// @Success 200 {object} updateUserResponse
+// @Failure 400 {object} errorMessage
+// @Failure 500 {object} errorMessage
+// @Router /auth/user [post]
 func updateUserRoute(service *auth.Service, logger *logrus.Logger) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		req := updateUserRequest{}
 		err := c.ShouldBindBodyWith(&req, binding.JSON)
 		if err != nil {
-			c.JSON(400, gin.H{"error": err.Error()})
+			c.JSON(400, errorMessage{Error: err.Error()})
 			return
 		}
 
@@ -64,14 +79,10 @@ func updateUserRoute(service *auth.Service, logger *logrus.Logger) func(c *gin.C
 		})
 
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
+			c.JSON(http.StatusInternalServerError, errorMessage{Error: err.Error()})
 			return
 		}
 
-		c.JSON(http.StatusCreated, gin.H{
-			"result": "ok",
-		})
+		c.JSON(http.StatusCreated, updateUserResponse{Result: "ok"})
 	}
 }

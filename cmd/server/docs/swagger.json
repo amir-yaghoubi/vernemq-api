@@ -1,0 +1,208 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API wrapper around vernemq broker",
+        "title": "Vernemq API",
+        "contact": {
+            "name": "Amirhossein Yaghoubi",
+            "url": "https://yaghoubi.dev",
+            "email": "amir.yaghoubi.dev@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:9595",
+    "basePath": "/api/v1/",
+    "paths": {
+        "/auth/user": {
+            "post": {
+                "description": "Insert or Update User ACL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Insert or Update User",
+                "parameters": [
+                    {
+                        "description": "Payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.updateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.updateUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/auth.errorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/auth.errorMessage"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a user by username",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete a user",
+                "parameters": [
+                    {
+                        "description": "Delete payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.deleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.deleteResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/auth.errorMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/auth.errorMessage"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "auth.deleteRequest": {
+            "type": "object",
+            "required": [
+                "username"
+            ],
+            "properties": {
+                "username": {
+                    "type": "string",
+                    "example": "USERNAME"
+                }
+            }
+        },
+        "auth.deleteResponse": {
+            "type": "object",
+            "properties": {
+                "is_deleted": {
+                    "type": "boolean",
+                    "example": false
+                }
+            }
+        },
+        "auth.errorMessage": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "something really bad happend"
+                }
+            }
+        },
+        "auth.publishACL": {
+            "type": "object",
+            "properties": {
+                "allowed_retain": {
+                    "type": "boolean"
+                },
+                "max_qos": {
+                    "type": "integer"
+                },
+                "pattern": {
+                    "type": "string",
+                    "example": "foo/bar/baz"
+                }
+            }
+        },
+        "auth.subACL": {
+            "type": "object",
+            "properties": {
+                "max_qos": {
+                    "type": "integer"
+                },
+                "pattern": {
+                    "type": "string",
+                    "example": "foo/bar/baz"
+                }
+            }
+        },
+        "auth.updateUserRequest": {
+            "type": "object",
+            "properties": {
+                "client_id": {
+                    "type": "string"
+                },
+                "mountpoint": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "publish_acl": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.publishACL"
+                    }
+                },
+                "subscribe_acl": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/auth.subACL"
+                    }
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.updateUserResponse": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "string",
+                    "example": "ok"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,138 @@
+basePath: /api/v1/
+definitions:
+  auth.deleteRequest:
+    properties:
+      username:
+        example: USERNAME
+        type: string
+    required:
+    - username
+    type: object
+  auth.deleteResponse:
+    properties:
+      is_deleted:
+        example: false
+        type: boolean
+    type: object
+  auth.errorMessage:
+    properties:
+      error:
+        example: something really bad happend
+        type: string
+    type: object
+  auth.publishACL:
+    properties:
+      allowed_retain:
+        type: boolean
+      max_qos:
+        type: integer
+      pattern:
+        example: foo/bar/baz
+        type: string
+    type: object
+  auth.subACL:
+    properties:
+      max_qos:
+        type: integer
+      pattern:
+        example: foo/bar/baz
+        type: string
+    type: object
+  auth.updateUserRequest:
+    properties:
+      client_id:
+        type: string
+      mountpoint:
+        type: string
+      password:
+        type: string
+      publish_acl:
+        items:
+          $ref: '#/definitions/auth.publishACL'
+        type: array
+      subscribe_acl:
+        items:
+          $ref: '#/definitions/auth.subACL'
+        type: array
+      username:
+        type: string
+    type: object
+  auth.updateUserResponse:
+    properties:
+      result:
+        example: ok
+        type: string
+    type: object
+host: localhost:9595
+info:
+  contact:
+    email: amir.yaghoubi.dev@gmail.com
+    name: Amirhossein Yaghoubi
+    url: https://yaghoubi.dev
+  description: API wrapper around vernemq broker
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Vernemq API
+  version: "1.0"
+paths:
+  /auth/user:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user by username
+      parameters:
+      - description: Delete payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/auth.deleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.deleteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/auth.errorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.errorMessage'
+      summary: Delete a user
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Insert or Update User ACL
+      parameters:
+      - description: Payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/auth.updateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.updateUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/auth.errorMessage'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.errorMessage'
+      summary: Insert or Update User
+      tags:
+      - users
+swagger: "2.0"
