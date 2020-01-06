@@ -4,24 +4,32 @@ import (
 	"errors"
 	"time"
 
-	mqttpattern "github.com/amir-yaghoubi/mqtt-pattern"
 	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasttemplate"
 	"golang.org/x/crypto/bcrypt"
+
+	mqttpattern "github.com/amir-yaghoubi/mqtt-pattern"
+	lru "github.com/hashicorp/golang-lru"
 )
 
 // InvalidSubscription qos value for invalid subscription
 const InvalidSubscription = 128
 
 // New returns new Service instance
-func New(repo Repository, logger *logrus.Logger) *Service {
-	return &Service{repo: repo, logger: logger}
+func New(cacheSize int, repo Repository, logger *logrus.Logger) (*Service, error) {
+	cache, err := lru.NewARC(cacheSize)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Service{repo: repo, logger: logger, passwordCache: cache}, nil
 }
 
 // Service auth service
 type Service struct {
-	repo   Repository
-	logger *logrus.Logger
+	repo          Repository
+	logger        *logrus.Logger
+	passwordCache *lru.ARCCache
 }
 
 // Subscription type
@@ -142,11 +150,14 @@ func (s *Service) UpdateUser(user User) error {
 	user.Password = string(hash)
 	user.UpdatedAt = time.Now()
 
+	s.passwordCache.Add(user.Username, user.Password)
+
 	return s.repo.Set(&user)
 }
 
 // DeleteUser delete user from database
 func (s *Service) DeleteUser(username string) (bool, error) {
+	s.passwordCache.Remove(username)
 	return s.repo.Delete(username)
 }
 
@@ -160,10 +171,19 @@ func (s *Service) Authenticate(clientID string, username string, password string
 		return nil, err
 	}
 
+	if p, isOk := s.passwordCache.Get(username); isOk { // cahce hit
+		if password == p.(string) {
+			return &Modifiers{ClientID: clientID, Mountpoint: user.Mountpoint}, nil
+		}
+		return nil, ErrUnAuthorizeAccess
+	}
+
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return nil, ErrUnAuthorizeAccess
 	}
+
+	s.passwordCache.Add(username, password)
 
 	return &Modifiers{ClientID: clientID, Mountpoint: user.Mountpoint}, nil
 }

@@ -1,12 +1,17 @@
 package auth
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPrivatePublishAuthorize(t *testing.T) {
-	srv := New(nil, nil)
+	srv, err := New(1, nil, logrus.New())
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	var qos1 uint8 = 1
 	var qos2 uint8 = 2
@@ -45,7 +50,10 @@ func TestPrivatePublishAuthorize(t *testing.T) {
 }
 
 func TestPrivateSubscribeAuthorize(t *testing.T) {
-	srv := New(nil, nil)
+	srv, err := New(1, nil, logrus.New())
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	var qos1 uint8 = 1
 

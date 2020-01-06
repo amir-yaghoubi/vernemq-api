@@ -69,7 +69,10 @@ func main() {
 
 	authRepo := redisRepo.New(client)
 	cachedAuthRepo, _ := lruRepo.New(authRepo, cfg.AuthConfig.LruSize)
-	authSrv := auth.New(cachedAuthRepo, logger)
+	authSrv, err := auth.New(cfg.AuthConfig.LruSize, cachedAuthRepo, logger)
+	if err != nil {
+		logger.Fatal(err)
+	}
 
 	prometheus := ginprometheus.NewPrometheus("vmq_auth")
 	prometheus.Use(router)
