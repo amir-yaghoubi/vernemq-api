@@ -19,6 +19,7 @@ require (
 	github.com/valyala/fasttemplate v1.1.0
 	github.com/vmihailenco/msgpack/v4 v4.3.1
 	github.com/zsais/go-gin-prometheus v0.1.0
+	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
 	golang.org/x/sys v0.0.0-20200103143344-a1369afcdac7 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
 	gopkg.in/yaml.v2 v2.2.7 // indirect

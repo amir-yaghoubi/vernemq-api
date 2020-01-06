@@ -7,6 +7,7 @@ import (
 	mqttpattern "github.com/amir-yaghoubi/mqtt-pattern"
 	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasttemplate"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // InvalidSubscription qos value for invalid subscription
@@ -137,6 +138,8 @@ func (s *Service) UpdateUser(user User) error {
 		user.CreatedAt = time.Now()
 	}
 
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+	user.Password = string(hash)
 	user.UpdatedAt = time.Now()
 
 	return s.repo.Set(&user)
@@ -157,8 +160,8 @@ func (s *Service) Authenticate(clientID string, username string, password string
 		return nil, err
 	}
 
-	// TODO hash password
-	if user.Password != password {
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
 		return nil, ErrUnAuthorizeAccess
 	}
 
