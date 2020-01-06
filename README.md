@@ -39,3 +39,19 @@ CC_SUBSCRIBE=12h
 # How to Start
 
 Simply just run `docker-compose up --build` in your terminal.
+
+# Webhooks
+
+You can point following **Vernemq webhooks** to our endpoints:
+
+- Point [auth_on_register](https://docs.vernemq.com/plugindevelopment/webhookplugins#auth_on_register) to `{{API_URL}}/api/v1/auth/register/`
+
+- Point [auth_on_subscribe](https://docs.vernemq.com/plugindevelopment/webhookplugins#auth_on_subscribe) to `{{API_URL}}/api/v1/auth/subscribe/`
+
+- Point [auth_on_publish](https://docs.vernemq.com/plugindevelopment/webhookplugins#auth_on_publish) to `{{API_URL}}/api/v1/auth/publish/`
+
+> For more information about how to configure Vernemq webhooks [read here](https://docs.vernemq.com/plugindevelopment/webhookplugins#configuring-webhooks)
+
+# Documentation
+
+Swagger documantation available at `{{API_URL}}/swagger/index.html`
